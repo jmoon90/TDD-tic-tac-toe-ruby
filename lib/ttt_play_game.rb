@@ -28,19 +28,16 @@ class TTTGame
     gb.current_board(@pieces_played)
   end
 
-
   def user_input
-    pieces_played(gets.chomp)
+    pieces_played(gets.chomp.to_i)
   end
 
-  def self.play_game
+  def run
     puts GameBoard.run
     ttt = TTTGame.new
-    i = 0
-    while i < 9 do
-      ttt.turn
-      ttt.place_piece
-      i += 1
+    while @pieces_played.length < 9 do
+      turn
+      place_piece
     end
   end
 end
