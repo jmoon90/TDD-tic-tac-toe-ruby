@@ -23,17 +23,6 @@ class GameBoard
     state
   end
 
-  def counter
-    if @counter == 0
-      if firstPlayer == 'Player'
-        @counter = 2
-      else
-        @counter = 1
-      end
-    end
-    @counter
-  end
-
   def current_board(pieces_played)
     new_board
     r = 0
@@ -42,17 +31,15 @@ class GameBoard
       while i < 9 do
         a = 0
         while a < pieces_played.length do
-          if state[r][i] == pieces_played[a.to_i].to_i
-            state[r][i] = players[@counter % 2];
-            @counter += 1
+          if state[r][i] == pieces_played[a]
+            state[r][i] = players[pieces_played.index(pieces_played[a]) % 2]
           end
           a += 1
         end
         i += 1
       end
-     puts state[r].join('')
       r += 1
     end
-    state
+    return state
   end
 end
