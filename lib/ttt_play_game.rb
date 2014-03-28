@@ -1,3 +1,4 @@
+#require 'pry'
 class TTTGame
   def initialize
     @counter = 0
@@ -10,8 +11,12 @@ class TTTGame
       user_input
     else
       puts 'Computers turn'
-      user_input
+      ai = AI.new(place_piece)
+      pieces_played(ai.run(@counter))
     end
+    puts place_piece[0].join('')
+    puts place_piece[1].join('')
+    puts place_piece[2].join('')
   end
 
   def pieces_played(place)
@@ -34,7 +39,6 @@ class TTTGame
 
   def run
     puts GameBoard.run
-    ttt = TTTGame.new
     while @pieces_played.length < 9 do
       turn
       place_piece
