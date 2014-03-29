@@ -1,7 +1,5 @@
-#require 'pry'
 class GameBoard
   attr_accessor :state
-  attr_reader :players
   def initialize
     @state = []
     @players = ['o', 'x']
@@ -11,6 +9,9 @@ class GameBoard
   def self.run
     gb = GameBoard.new
     gb.new_board
+    puts gb.new_board[0].join('')
+    puts gb.new_board[1].join('')
+    puts gb.new_board[2].join('')
   end
 
   def new_board
@@ -32,7 +33,7 @@ class GameBoard
         a = 0
         while a < pieces_played.length do
           if state[r][i] == pieces_played[a]
-            state[r][i] = players[pieces_played.index(pieces_played[a]) % 2]
+            state[r][i] = @players[pieces_played.index(pieces_played[a]) % 2]
           end
           a += 1
         end
