@@ -7,9 +7,23 @@ class GameResult
 
   def output(hands, total_hands)
     if winning_hands.include?(hands)
-      'Computer wins'
+      puts 'Computer wins'
+      message
     elsif total_hands.length == 9
-      'Tied game'
+      puts 'Tied game'
+      message
+    end
+  end
+
+  def message
+    puts "play_again? (Y or Yes)"
+    user_input = gets.chomp
+    if user_input == 'Y' || user_input == 'Yes'
+      game_board = GameBoard.new
+      ttt = TTTGame.new
+      ttt.run
+    else
+      puts "Have a wonderful day"
     end
   end
 end
