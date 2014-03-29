@@ -1,6 +1,6 @@
 class GameResult
   def initialize(computer_hands, total_hands)
-    @computer_hands = compuer_hands
+    @computer_hands = computer_hands
     @total_hands = total_hands
   end
 
