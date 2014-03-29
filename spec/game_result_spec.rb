@@ -19,7 +19,6 @@ describe GameResult do
   it "doesn't do anything if game isn't over" do
     pending "pending"
     gr = GameResult.new
-    player_hand = [8]
     computer_hand = [1,3]
     total_hands = [1,3,8]
 
