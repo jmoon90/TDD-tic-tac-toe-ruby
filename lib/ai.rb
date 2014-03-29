@@ -4,11 +4,22 @@ class AI
     @state = state
     @numbers = []
     @player_pieces = 0
+
+    @row_one   = @state[0]
+    @row_two   = @state[1]
+    @row_three = @state[2]
+
+    @col_one =   [@state[0][0],@state[1][0],@state[2][0]]
+    @col_two =   [@state[0][1],@state[1][1],@state[2][1]]
+    @col_three = [@state[0][2],@state[1][2],@state[2][2]]
+
+    @top_left =  [@state[0][0], @state[1][1], @state[2][2]]
+    @top_right = [@state[0][2], @state[1][1], @state[2][0]]
   end
 
   def run(counter)
     if counter < 2
-      initial_move
+      @state[1][1] == 5 ? 5 : 1
     else
       play_best_move
     end
@@ -28,19 +39,12 @@ class AI
       play_diagonal(players[p]) if @numbers.empty?
       p += 1
     end
-    p = 0
-    while p < 1 do
-      play_adjacent if @numbers.empty?
-      p += 1
-    end
+    play_adjacent if @numbers.empty?
     @numbers[0]
   end
 
   def play_row(i, player)
-    row_one   = @state[0]
-    row_two   = @state[1]
-    row_three = @state[2]
-    rows = [row_one, row_two, row_three]
+    rows = [@row_one, @row_two, @row_three]
     while i < 3 do
       @player_pieces = 0
       if rows[i].count { |x| x.is_a? Integer } == 1
@@ -53,14 +57,10 @@ class AI
       i += 1
       @numbers << number if @player_pieces == 2
     end
-    @numbers[0]
   end
 
   def play_column(i, player)
-    col_one =     [@state[0][0],@state[1][0],@state[2][0]]
-    col_two =     [@state[0][1],@state[1][1],@state[2][1]]
-    col_three =   [@state[0][2],@state[1][2],@state[2][2]]
-    columns = [col_one, col_two, col_three]
+    columns = [@col_one, @col_two, @col_three]
 
     while i < 3 do
       @player_pieces = 0
@@ -74,13 +74,10 @@ class AI
       i += 1
       @numbers << number if @player_pieces == 2
     end
-    @numbers[0]
   end
 
   def play_diagonal(player)
-    top_left = [@state[0][0], @state[1][1], @state[2][2]]
-    top_right = [@state[0][2], @state[1][1], @state[2][0]]
-    diagonals = [top_left, top_right]
+    diagonals = [@top_left, @top_right]
 
     i = 0
     while i < 2 do
@@ -95,71 +92,43 @@ class AI
       i += 1
       @numbers << number if @player_pieces == 2
     end
-    @numbers[0]
   end
 
   def play_adjacent
-    col_one =     [@state[0][0],@state[1][0],@state[2][0]]
-    col_two =     [@state[0][1],@state[1][1],@state[2][1]]
-    col_three =   [@state[0][2],@state[1][2],@state[2][2]]
-    columns = [col_one, col_two, col_three]
+    rows = [@row_one, @row_two, @row_three]
+    columns = [@col_one, @col_two, @col_three]
+    diagonals = [@top_left, @top_right, []]
 
-    top_left = [@state[0][0], @state[1][1], @state[2][2]]
-    top_right = [@state[0][2], @state[1][1], @state[2][0]]
-    diagonals = [top_left, top_right]
+    playable_position = [rows, columns, diagonals]
 
-    i = 0
-    while i < 3 do
-      if @state[i].count { |x| x.is_a? Integer } > 1
-        @state[i].each_with_index do |x, index|
-          if x == 'x'
-            @numbers << @state[i][index+1] if index == 0
-            @numbers << @state[i][index+1] if index == 1
-            @numbers << @state[i][index-1] if index == 2
-          end
-        end
-      end
-      i += 1
-    end
-    row = 0
-    while(row < 3) do
-      columns.each do |column|
-        if column.count { |x| x.is_a? Integer } > 1
-          column.each_with_index do |x, index|
+    playable_position.each do |direction|
+      i = 0
+      while i < 3 do
+        if direction[i].count { |x| x.is_a? Integer } > 1
+          direction[i].each_with_index do |x, index|
             if x == 'x'
-              @numbers << column[index+1] if index == 0
-              @numbers << column[index+1] if index == 1
-              @numbers << column[index-1] if index == 2
+              @numbers << direction[i][index+1] if index == 0
+              @numbers << direction[i][index+1] if index == 1
+              @numbers << direction[i][index-1] if index == 2
             end
           end
         end
+        i += 1
       end
-      row += 1
     end
 
     i = 0
-    while(i < 2) do
-      if diagonals[i].count { |x| x.is_a? Integer } > 1
-        diagonals[i].each_with_index do |x, index|
-          if x == 'x'
-            @numbers << diagonals[i][index+1] if index == 0
-            @numbers << diagonals[i][index+1] if index == 1
-            @numbers << diagonals[i][index-1] if index == 2
+    while(i < 3) do
+      if rows[i].count { |x| x.is_a? Integer } > 0
+        rows[i].each_with_index do |x, index|
+          if x != 'x' && x != 'o'
+            @numbers << rows[i][index] if index == 0
+            @numbers << rows[i][index] if index == 1
+            @numbers << rows[i][index] if index == 2
           end
         end
       end
       i += 1
     end
-    @numbers[0]
-  end
-
-  def initial_move
-    @state[1][1] == 5 ? 5 : 1
   end
 end
-
-    state = [[1,    2, 'x'],
-             [4,  'o', 'x'],
-             ['o', 8,   9]]
-    ai = AI.new(state)
-  ai.play_column(0, 'x')
