@@ -137,7 +137,6 @@ describe AI do
     expect(ai.run(3)).to eql(9)
   end
 
-#check methods from run method
   it 'place piece to block column' do
     state = [['o',2,  3],
              ['o','x',6],
@@ -152,5 +151,13 @@ describe AI do
              [7,  8,  9]]
     ai = AI.new(state)
     expect(ai.run(6)).to eql(2)
+  end
+
+  it 'place piece to blcok trick' do
+    state = [[1, 'o', 3],
+             ['o','x',6],
+             [7,  8,  9]]
+    ai = AI.new(state)
+    expect(ai.run(6)).to eql(1)
   end
 end
