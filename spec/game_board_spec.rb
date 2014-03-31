@@ -3,10 +3,10 @@ require 'ttt_play_game'
 
 describe GameBoard do
   it 'creates a board' do
-    game_board = GameBoard.new
-    expect(game_board.new_board).to eq([[1,2,3],
-                                        [4,5,6],
-                                        [7,8,9]])
+    game_board = GameBoard.new({})
+    expect(game_board.run).to eq([[1,2,3],
+                                  [4,5,6],
+                                  [7,8,9]])
   end
 
   it 'displays current board' do
