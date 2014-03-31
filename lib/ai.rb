@@ -1,4 +1,5 @@
 class AI
+  attr_accessor :players_piece
   def initialize(attr)
     @first_move = attr[:first_move]
     @state = attr[:state]
@@ -16,22 +17,23 @@ class AI
   end
 
   def run(counter)
+  def determine_computer_piece
     if @first_move == 'player'
-      player = 'o'
-      computer = 'x'
+      @players_piece = { player: 'o', computer: 'x' }
     else
-      computer = 'o'
-      player = 'x'
+      @players_piece = { player: 'x', computer: 'o' }
     end
+  end
 
+  def move
     if counter < 3 || (counter < 4 if @first_move == 'player')
       @state[1][1] == 5 ? 5 : 1
     else
-      players = ['o', 'x']
-      2.times do |p|
-        play_move(players[p])
+      players = [:computer, :player]
+      players.each do |p|
+        play_move(players_piece[p])
       end
-      play_adjacent(player, computer) if @numbers.empty?
+      play_adjacent(players_piece[:player], players_piece[:computer]) if @numbers.empty?
       @numbers[0]
     end
   end
