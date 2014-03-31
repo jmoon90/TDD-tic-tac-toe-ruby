@@ -3,7 +3,6 @@ class GameBoard
   def initialize
     @state = []
     @players = ['o', 'x']
-    @counter = 0
   end
 
   def self.run
