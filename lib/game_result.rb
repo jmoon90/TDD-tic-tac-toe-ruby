@@ -21,7 +21,6 @@ class GameResult
         message
         abort
       elsif @total_hands == 9 && hand == [3,5,7]
-
         puts 'Tied game'
         message
         abort
@@ -30,14 +29,25 @@ class GameResult
   end
 
   def message
-    puts "play_again? (Y or Yes)"
+    print "play_again? (y or yes): "
     user_input = gets.chomp
-    if user_input == 'Y' || user_input == 'Yes'
-      game_board = GameBoard.new
-      ttt = TTTGame.new
-      ttt.run
+    if user_input == 'y' || user_input == 'yes'
+      puts "\nTIC---------------------"
+      puts '----------TAC-----------'
+      puts '---------------------TOE'
+      game_board
+      play_new_game
     else
       puts "Have a wonderful day"
     end
+  end
+
+  def game_board
+    GameBoard.new({})
+  end
+
+  def play_new_game
+    ttt = TTTGame.new
+    ttt.run
   end
 end
