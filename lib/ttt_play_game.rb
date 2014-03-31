@@ -1,7 +1,9 @@
-#require 'pry'
 class TTTGame
+  attr_accessor :counter
   def initialize
-    @counter = 0
+    @counter = rand(1..2)
+    @first_move = 'who'
+    @counter == 1 ? @first_move = 'computer' : @first_move = 'player'
     @computer_pieces= []
     @pieces_played = []
   end
@@ -12,14 +14,15 @@ class TTTGame
   end
 
   def turn
-    if @counter % 2 == 0
+    if counter % 2 == 0
       puts 'Players turn. Place your piece (pick a number)'
       user_input
     else
       puts 'Computers turn'
-      ai = AI.new(place_piece)
-      pieces_played(ai.run(@counter))
-      @computer_pieces << ai.run(@counter)
+      attr = { state: place_piece, first_move: @first_move }
+      ai = AI.new(attr)
+      pieces_played(ai.run(counter))
+      @computer_pieces << ai.run(counter)
     end
     puts place_piece[0].join('')
     puts place_piece[1].join('')
@@ -29,9 +32,9 @@ class TTTGame
 
   def pieces_played(place)
     if @pieces_played.include?(place) || ![1,2,3,4,5,6,7,8,9].include?(place)
-      "Can't play that position. Try again"
+      puts "Can't play that position. Try again"
+      user_input
     elsif !@pieces_played.include?(place)
-      @counter += 1
       @pieces_played << place
     end
   end
@@ -50,6 +53,7 @@ class TTTGame
     while @pieces_played.length != 9 do
       turn
       place_piece
+      @counter += 1
     end
   end
 end

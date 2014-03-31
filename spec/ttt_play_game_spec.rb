@@ -25,6 +25,7 @@ describe TTTGame do
   end
 
   it 'saves piece only if it was not played before' do
+    pending
     play_game = TTTGame.new
     user_input = 1
     play_game.pieces_played(user_input)
