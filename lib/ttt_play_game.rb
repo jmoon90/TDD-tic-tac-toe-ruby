@@ -2,32 +2,64 @@ class TTTGame
   attr_accessor :counter
   def initialize
     @counter = rand(1..2)
-    @first_move = 'who'
+    @first_move = ''
     @counter == 1 ? @first_move = 'computer' : @first_move = 'player'
     @computer_pieces= []
     @pieces_played = []
   end
 
-  def check_game_result
+  def run
+    game_board({})
+    while @pieces_played.length != 9 do
+      turn
+      place_piece
+      @counter += 1
+    end
+  end
+
+  def display_game
+    puts '------------------------'
+    puts place_piece[0].join('')
+    puts place_piece[1].join('')
+    puts place_piece[2].join('')
+    puts '------------------------'
+  end
+
+  def game_result
     gr = GameResult.new(@computer_pieces, @pieces_played.length)
     gr.run
   end
 
+  def ai
+    attr = { state: place_piece, first_move: @first_move, counter: counter }
+    ai = AI.new(attr)
+    @computer_pieces << ai.run
+    pieces_played(ai.run)
+  end
+
+  def game_board(attr)
+    gb = GameBoard.new(attr)
+    gb.run
+  end
+
   def turn
     if counter % 2 == 0
-      puts 'Players turn. Place your piece (pick a number)'
+      print 'Players turn. Pick a number: '
       user_input
     else
       puts 'Computers turn'
-      attr = { state: place_piece, first_move: @first_move }
-      ai = AI.new(attr)
-      pieces_played(ai.run(counter))
-      @computer_pieces << ai.run(counter)
+      ai
     end
-    puts place_piece[0].join('')
-    puts place_piece[1].join('')
-    puts place_piece[2].join('')
-    check_game_result unless @computer_pieces.empty?
+    display_game
+    game_result unless @computer_pieces.empty?
+  end
+
+  def place_piece
+    attr = { pieces_played: @pieces_played }
+    game_board(attr)
+  end
+
+  def place_piece_output
   end
 
   def pieces_played(place)
@@ -39,21 +71,7 @@ class TTTGame
     end
   end
 
-  def place_piece
-    gb = GameBoard.new
-    gb.current_board(@pieces_played)
-  end
-
   def user_input
     pieces_played(gets.chomp.to_i)
-  end
-
-  def run
-    GameBoard.run
-    while @pieces_played.length != 9 do
-      turn
-      place_piece
-      @counter += 1
-    end
   end
 end
