@@ -19,9 +19,12 @@ class GameResult
       if (hand - @computer_hands).empty?
         puts 'Computer wins'
         message
-      elsif @total_hands == 9
+        abort
+      elsif @total_hands == 9 && hand == [3,5,7]
+
         puts 'Tied game'
         message
+        abort
       end
     end
   end
