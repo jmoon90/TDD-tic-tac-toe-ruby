@@ -1,8 +1,10 @@
 class AI
   attr_accessor :players_piece
+  attr_reader :counter
   def initialize(attr)
     @first_move = attr[:first_move]
     @state = attr[:state]
+    @counter = attr[:counter]
     @numbers = []
     @player_pieces = 0
 
@@ -16,7 +18,11 @@ class AI
     @playable_position = [@rows, @columns, @diagonals]
   end
 
-  def run(counter)
+  def run
+    determine_computer_piece
+    move
+  end
+
   def determine_computer_piece
     if @first_move == 'player'
       @players_piece = { player: 'o', computer: 'x' }
