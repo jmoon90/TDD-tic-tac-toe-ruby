@@ -1,6 +1,7 @@
 class AI
   attr_accessor :players_piece
-  attr_reader :counter
+  attr_reader :counter, :state
+
   def initialize(attr)
     @first_move = attr[:first_move]
     @state = attr[:state]
@@ -8,12 +9,12 @@ class AI
     @numbers = []
     @player_pieces = 0
 
-    @rows = [@state[0], @state[1], @state[2]]
-    @columns = [[@state[0][0],@state[1][0],@state[2][0]],
-                [@state[0][1],@state[1][1],@state[2][1]],
-                [@state[0][2],@state[1][2],@state[2][2]]]
-    @diagonals = [[@state[0][0], @state[1][1], @state[2][2]],
-                  [@state[0][2], @state[1][1], @state[2][0]],
+    @rows = [state[0], state[1], state[2]]
+    @columns = [[state[0][0],state[1][0],state[2][0]],
+                [state[0][1],state[1][1],state[2][1]],
+                [state[0][2],state[1][2],state[2][2]]]
+    @diagonals = [[state[0][0], state[1][1], state[2][2]],
+                  [state[0][2], state[1][1], state[2][0]],
                   [[]]]
     @playable_position = [@rows, @columns, @diagonals]
   end
@@ -25,9 +26,9 @@ class AI
 
   def determine_computer_piece
     if @first_move == 'player'
-      @players_piece = { player: 'o', computer: 'x' }
+      @players_piece = { computer: 'x', player: 'o' }
     else
-      @players_piece = { player: 'x', computer: 'o' }
+      @players_piece = { computer: 'o', player: 'x' }
     end
   end
 
@@ -35,11 +36,11 @@ class AI
     if counter < 3 || (counter < 4 if @first_move == 'player')
       @state[1][1] == 5 ? 5 : 1
     else
-      players = [:computer, :player]
-      players.each do |p|
+      @players_piece.keys.each do |p|
         play_move(players_piece[p])
       end
       play_adjacent(players_piece[:player], players_piece[:computer]) if @numbers.empty?
+      play_remaining_position
       @numbers[0]
     end
   end
@@ -84,7 +85,9 @@ class AI
         i += 1
       end
     end
+  end
 
+  def play_remaining_position
     i = 0
     while(i < 3) do
       if @rows[i].count { |x| x.is_a? Integer } > 0

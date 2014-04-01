@@ -181,12 +181,30 @@ describe AI do
     expect(ai.run).to eql(2)
   end
 
-  it 'place piece to blcok trick' do
+  it 'place piece to block trick' do
     state = [[1, 'o', 3],
              ['o','x',6],
              [7,  8,  9]]
     attr = { state: state, first_move: 'player', counter: 6 }
     ai = AI.new(attr)
     expect(ai.run).to eql(1)
+  end
+
+  it 'plays remaining piece' do
+    state = [['o', 'o', 'x'],
+             ['o','x',6],
+             ['x',  'o',  9]]
+    attr = { state: state, first_move: 'player', counter: 6 }
+    ai = AI.new(attr)
+    expect(ai.run).to eql(9)
+  end
+
+  it 'plays remaining piece' do
+    state = [['o', 'o', 'x'],
+             ['x','x','o'],
+             ['o',  8,  9]]
+    attr = { state: state, first_move: 'player', counter: 6 }
+    ai = AI.new(attr)
+    expect(ai.run).to eql(8)
   end
 end
