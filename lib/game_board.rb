@@ -1,5 +1,5 @@
 class GameBoard
-  attr_accessor :state
+  attr_accessor :state, :pieces_played
 
   def initialize(attr)
     @state = []
@@ -10,6 +10,7 @@ class GameBoard
   def run
     new_board
     @pieces_played.nil? ? new_board_print : current_board
+    state
   end
 
   def new_board
@@ -19,11 +20,9 @@ class GameBoard
   end
 
   def new_board_print
-    new_board
-    puts @state[0].join('')
-    puts @state[1].join('')
-    puts @state[2].join('')
-    state
+    puts state[0].join('')
+    puts state[1].join('')
+    puts state[2].join('')
   end
 
   def current_board
@@ -32,9 +31,9 @@ class GameBoard
       i = 0
       while i < 9 do
         a = 0
-        while a < @pieces_played.length do
-          if state[r][i] == @pieces_played[a]
-            state[r][i] = @players[@pieces_played.index(@pieces_played[a]) % 2]
+        while a < pieces_played.length do
+          if state[r][i] == pieces_played[a]
+            state[r][i] = @players[pieces_played.index(pieces_played[a]) % 2]
           end
           a += 1
         end
@@ -42,6 +41,5 @@ class GameBoard
       end
       r += 1
     end
-    state
   end
 end
