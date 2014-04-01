@@ -1,8 +1,8 @@
 class TTTGame
   attr_accessor :counter
+
   def initialize
     @counter = rand(1..2)
-    @first_move = ''
     @counter == 1 ? @first_move = 'computer' : @first_move = 'player'
     @computer_pieces= []
     @pieces_played = []
@@ -34,7 +34,7 @@ class TTTGame
     attr = { state: place_piece, first_move: @first_move, counter: counter }
     ai = AI.new(attr)
     @computer_pieces << ai.run
-    pieces_played(ai.run)
+    pieces_played(@computer_pieces[-1])
   end
 
   def game_board(attr)
